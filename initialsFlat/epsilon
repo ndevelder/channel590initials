@@ -1,0 +1,49 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM Extend Project: Open source CFD        |
+|  \\    /   O peration     | Version:  1.6-ext                               |
+|   \\  /    A nd           | Web:      www.extend-project.de                 |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 1.0; 
+
+boundaryField
+{
+    WALL_TOP
+    {
+        type            groovyBC;
+        //valueExpression "(time()<5) ? 2*nu*internalField(k)/sqr(mag(delta())) : (2*nu*sqr(mag(snGrad(kSqrt))))";
+        //valueExpression "2*nu*internalField(k)/sqr(mag(delta()))";
+        valueExpression "1*nu*sqr(mag(snGrad(kSqrt)))";
+        value           uniform 135.008;
+    }
+    WALL_BOTTOM
+    {
+        type            groovyBC;
+        //valueExpression "(time()<5) ? 2*nu*internalField(k)/sqr(mag(delta())) : (2*nu*sqr(mag(snGrad(kSqrt))))";
+        //valueExpression "2*nu*internalField(k)/sqr(mag(delta()))";
+        valueExpression "1*nu*sqr(mag(snGrad(kSqrt)))";
+        value           uniform 135.008;
+    }
+    frontAndBackPlanes
+    {
+        type            zeroGradient;
+    }
+    INOUT_CYC
+    {
+        type            cyclic;
+        value           uniform 1.0; 
+    }
+}
+// ************************************************************************* //
